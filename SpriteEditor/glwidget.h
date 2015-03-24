@@ -24,6 +24,8 @@ public:
 	void AddPoint(const QPoint qpoint);
 	void DeleteLastPoint(void);
 	void AllClearPoint(void);
+
+	void SaveSprite(const char* const FileName);
 	
 protected:
 	void initializeGL();        //  OpenGL ‰Šú‰»

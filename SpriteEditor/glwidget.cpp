@@ -3,6 +3,7 @@
 #include <QMimeData>
 #include <QDrag>
 #include "Sprite.h"
+#include <stdio.h>
 
 const float GlWidget::MOUSE_OFFSET_X = +0.0f;
 const float GlWidget::MOUSE_OFFSET_Y = +0.0f;
@@ -81,86 +82,7 @@ void GlWidget::resizeGL(int width, int height)
 
 void GlWidget::paintGL()
 {
-#if 0
-	///glClear(GL_COLOR_BUFFER_BIT);   //  カラーバッファをクリア
-
-	//qglColor(Qt::black);            //  描画色指定
-	///qglColor(Qt::blue);            //  描画色指定
-	///glBegin(GL_LINES);              //  線分（GL_LINES）描画開始
-
-	//glEnd();                        //  線分（GL_LINES）描画終了
-
-	//test textrue
-	//モデル・ビュー・マトリックス設定
-	glMatrixMode (GL_MODELVIEW);
-	glLoadIdentity();
-
-	//カメラ設定
-	gluLookAt(3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
-	glPushMatrix();
-	{ // 平面表示
-
-		//材質設定
-		//GLfloat color[] = { 0.8, 0.2, 0.2, 1.0 };
-		GLfloat color[] = { 1.0, 1.0, 1.0, 1.0 };
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
-
-		glRotatef(angle, 0.0, 1.0, 0.0);
-
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		glBegin(GL_QUADS);
-		glNormal3f(0.0, 1.0, 0.0);
-		glTexCoord2f(2.0, 0.0); glVertex3f(-1.0, 0.0, -1.0);
-		glTexCoord2f(2.0, 2.0); glVertex3f(-1.0, 0.0, 1.0);
-		glTexCoord2f(0.0, 2.0); glVertex3f(1.0, 0.0, 1.0);
-		glTexCoord2f(0.0, 0.0); glVertex3f(1.0, 0.0, -1.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-}
-	glPopMatrix();
-
-	angle = (angle>360.0) ? angle - 360.0 : angle + 1;
-	//endtest
-#endif
-
-#if 0
-	glMatrixMode(GL_PROJECTION);  //  射影行列
-	glLoadIdentity();               //  変換行列を初期化
-	gluPerspective(30.0,            //  視野角
-
-	(double)width() / (double)height(),     //  アスペクト比
-	1.0, 100.0);    //  視野範囲（近距離・遠距離）
-	gluLookAt(3.0, 4.0, 5.0,      //  視点位置
-	0.0, 0.0, 0.0,      //  目標位置
-	0.0, 1.0, 0.0);     //  上方向
-
-	glMatrixMode(GL_MODELVIEW);   //  モデルビュー行列
-	glLoadIdentity();               //  変換行列を初期化
 	qglColor(Qt::black);            //  描画色指定
-	glBegin(GL_LINES);              //  線分（GL_LINES）描画開始
-	glVertex3d(0.0, 0.0, 0.0);      //  線分座標指定
-	glVertex3d(0.0, 1.0, 0.0);
-
-	glEnd();                        //  線分（GL_LINES）描画終了
-	glFlush();                      //  OpenGL の命令をフラッシュ
-#endif
-
-#if 0
-	glClear(GL_COLOR_BUFFER_BIT);
-	glBegin(GL_TRIANGLES);
-	glColor3f(1, 0, 0);
-	glVertex3f(-0.5, -0.5, 0);
-	glColor3f(0, 1, 0);
-	glVertex3f(0.5, -0.5, 0);
-	glColor3f(0, 0, 1);
-	glVertex3f(0, 0.5, 0);
-	glEnd();
-#endif
-
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// 座標系の設定
@@ -174,7 +96,8 @@ void GlWidget::paintGL()
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glBindTexture(GL_TEXTURE_2D,textures[m_DispTextureNum]);
 
-#if 1
+	//ポリゴンを1枚描画
+#if 0
 	glBegin(GL_QUADS);
 	glColor3f(1, 1, 1);
 	glTexCoord2f(1.0, 0.0);
@@ -183,7 +106,7 @@ void GlWidget::paintGL()
 	glColor3f(1, 1, 1);
 	glTexCoord2f(1.0, 1.0);
 	glVertex3f(-0.5, 0.5, 0);
-
+	
 	glColor3f(1, 1, 1);
 	glTexCoord2f(0.0, 1.0);
 	glVertex3f(0.5, 0.5, 0);
@@ -193,7 +116,12 @@ void GlWidget::paintGL()
 	glVertex3f(0.5, -0.5, 0);
 	glEnd();
 #endif
-	glDisable(GL_TEXTURE_2D);
+
+
+
+	m_pSprites[m_DispTextureNum].Draw();
+	
+#if 0
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	//DrawLine
@@ -209,6 +137,8 @@ void GlWidget::paintGL()
 	//glColor3f(1, 1, 1);
 	//glVertex3f(1, 0, 0);
 	//glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 	glPointSize(3.0);
 	glBegin(GL_POINTS);
 	
@@ -218,6 +148,7 @@ void GlWidget::paintGL()
 		glVertex3f(m_QPoints[i].x() + MOUSE_OFFSET_X, m_QPoints[i].y() + MOUSE_OFFSET_Y, 0);
 	}
 	glEnd();
+#endif
 }
 
 void GlWidget::timerEvent(QTimerEvent *e)
@@ -229,6 +160,7 @@ void GlWidget::timerEvent(QTimerEvent *e)
 void GlWidget::AddTextureFile(QString fileName)
 {
 	textures[m_textureNum] = bindTexture(QImage(fileName));
+	m_pSprites[m_textureNum].SetTextureAndPath(fileName, textures[m_textureNum]);
 	m_textureNum++;
 }
 
@@ -273,6 +205,8 @@ void GlWidget::AddPoint(const QPoint qpoint)
 		return;
 	}
 
+	m_pSprites[m_DispTextureNum].AddUV(qpoint);
+
 	m_QPoints[m_UsePointCount] = qpoint;
 	m_UsePointCount++;
 	
@@ -291,4 +225,16 @@ void GlWidget::DeleteLastPoint(void)
 void GlWidget::AllClearPoint(void)
 {
 	m_UsePointCount = 0;
+}
+
+void GlWidget::SaveSprite(const char* const FileName)
+{
+	FILE* pFile = NULL;
+	pFile = fopen(FileName, "w");
+	
+	m_pSprites[m_DispTextureNum].Save(pFile);
+
+	
+
+	fclose(pFile);
 }

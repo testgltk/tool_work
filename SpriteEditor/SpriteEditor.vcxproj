@@ -105,6 +105,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="spriteeditor.cpp" />
+    <ClCompile Include="UVData.cpp" />
+    <ClCompile Include="UVDataManual.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="spriteeditor.h">
@@ -132,6 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="UVData.h" />
+    <ClInclude Include="UVDataAuto.h" />
+    <ClInclude Include="UVDataManual.h" />
     <CustomBuild Include="draglistwidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing draglistwidget.h...</Message>

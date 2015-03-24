@@ -16,7 +16,7 @@ private:
 	
 private slots:
 void on_actionOpenFile_triggered(void);
-void on_actionSaveOriginalFile_clicked(void);
+void on_actionSaveOriginalFile_triggered(void);
 void on_listWidget_currentRowChanged(int);
 void on_pushButton_ClearPoint_clicked(void);
 };

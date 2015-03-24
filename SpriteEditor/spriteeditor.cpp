@@ -61,9 +61,14 @@ void SpriteEditor::on_actionOpenFile_triggered(void)
 	}
 }
 
-void SpriteEditor::on_actionSaveOriginalFile_clicked(void)
+void SpriteEditor::on_actionSaveOriginalFile_triggered(void)
 {
-
+	QString saveText = QFileDialog::getSaveFileName(this, tr("Save File"), ".", tr("SpriteFile(*.sprite)"));
+	if (!saveText.isEmpty())
+	{
+		//Save
+		ui.OpenGLWidget->SaveSprite(saveText.toLocal8Bit().data());
+	}
 }
 
 void SpriteEditor::on_listWidget_currentRowChanged(int)
