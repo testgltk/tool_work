@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QMessagebox>
 #include <QGraphicsPixmapItem>
+#include <QColorDialog>
+#include <QColor>
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
 ///#include<q
@@ -15,14 +17,12 @@ SpriteEditor::SpriteEditor(QWidget *parent):QMainWindow(parent)
 	ui.setupUi(this);
 
 	//QObject::connect(this, QAction::triggered,on_actionOpenFile_triggered);
-
 }
 
 SpriteEditor::~SpriteEditor()
 {
 
 }
-
 
 void SpriteEditor::on_actionOpenFile_triggered(void)
 {
@@ -79,4 +79,26 @@ void SpriteEditor::on_listWidget_currentRowChanged(int)
 void SpriteEditor::on_pushButton_ClearPoint_clicked(void)
 {
 	ui.OpenGLWidget->AllClearPoint();
+}
+
+void SpriteEditor::on_actionSavePolygonData_triggered(void)
+{
+	QString saveText = QFileDialog::getSaveFileName(this, tr("Save File"), ".", tr("PolygonFile(*.polygon)"));
+	if (!saveText.isEmpty())
+	{
+		//Save
+		ui.OpenGLWidget->SavePolygon(saveText.toLocal8Bit().data());
+	}
+}
+
+void SpriteEditor::on_pushButton_selectColor_clicked(void)
+{
+	QColor color = QColorDialog::getColor( Qt::yellow, this );
+
+	ui.OpenGLWidget->SetNowSelectPolygonColor(ui.spinBox_selectPolygonID->value(), color.redF(), color.greenF(), color.blueF(), color.alphaF());
+}
+
+void SpriteEditor::on_spinBox_selectGroupID_valueChanged(int)
+{
+	ui.OpenGLWidget->SetNowSelectPolygonGroupID(ui.spinBox_selectPolygonID->value(), ui.spinBox_selectGroupID->value());
 }

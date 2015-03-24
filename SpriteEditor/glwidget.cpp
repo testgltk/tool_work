@@ -42,6 +42,7 @@ GlWidget::~GlWidget()
 
 	delete[] m_QPoints;
 	m_QPoints = 0;
+	glDisable(GL_BLEND);
 }
 
 void GlWidget::initializeGL()
@@ -72,9 +73,18 @@ void GlWidget::initializeGL()
 	//テクスチャ 初期化
 	texture = bindTexture(QImage("testRect.png"));
 	
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	timer->start(16, this);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+
 }
 
 
@@ -111,6 +121,8 @@ void GlWidget::AddTextureFile(QString fileName)
 	m_pSprites[m_textureNum].SetTextureWidth(Width);
 	m_pSprites[m_textureNum].SetTextureHeight(height);
 	m_textureNum++;
+
+
 }
 
 void GlWidget::AddTextureNum(int nNum)
@@ -145,8 +157,6 @@ void GlWidget::mousePressEvent(QMouseEvent *e)
 		m_pSprites[m_DispTextureNum].DeleteLastUV();
 	}
 }
-
-
 
 void GlWidget::AddPoint(const QPoint qpoint)
 {
@@ -191,7 +201,6 @@ void GlWidget::AllClearPoint(void)
 {
 	m_pSprites[m_DispTextureNum].AllClearUV();
 	m_UsePointCount = 0;
-	
 }
 
 void GlWidget::SaveSprite(const char* const FileName)
@@ -201,7 +210,25 @@ void GlWidget::SaveSprite(const char* const FileName)
 	
 	m_pSprites[m_DispTextureNum].Save(pFile);
 
+	fclose(pFile);
+}
+
+void GlWidget::SavePolygon(const char* const FileName)
+{
+	FILE* pFile = NULL;
+	pFile = fopen(FileName, "w");
 	
+	m_pSprites[m_DispTextureNum].SavePolygon(pFile);
 
 	fclose(pFile);
+}
+
+void GlWidget::SetNowSelectPolygonColor(int nIndex, float r, float g, float b, float a)
+{
+	m_pSprites[m_DispTextureNum].SetNowSelectPolygonColor(nIndex,r, g, b, a);
+}
+
+void GlWidget::SetNowSelectPolygonGroupID(int nIndex, int nGroupID)
+{
+	m_pSprites[m_DispTextureNum].SetNowSelectPolygonGroupID(nIndex, nGroupID);
 }

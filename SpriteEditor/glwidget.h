@@ -30,7 +30,11 @@ public:
 	void AllClearPoint(void);
 
 	void SaveSprite(const char* const FileName);
-	
+	void SavePolygon(const char* const FileName);
+
+
+	void SetNowSelectPolygonColor(int nIndex,float r, float g, float b, float a);
+	void SetNowSelectPolygonGroupID(int nIndex, int nGroupID);
 protected:
 	void initializeGL();        //  OpenGL 初期化
 	void resizeGL(int, int);    //  ウィジットリサイズ時のハンドラ

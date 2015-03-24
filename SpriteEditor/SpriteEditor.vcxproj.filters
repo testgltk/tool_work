@@ -77,6 +77,9 @@
     <ClCompile Include="UVDataManual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DrawTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="spriteeditor.h">
@@ -109,6 +112,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UVDataManual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawTriangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

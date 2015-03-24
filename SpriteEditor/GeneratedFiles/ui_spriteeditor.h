@@ -15,10 +15,12 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -32,8 +34,13 @@ class Ui_SpriteEditorClass
 public:
     QAction *actionOpenFile;
     QAction *actionSaveOriginalFile;
-    QAction *actionLoadOriginalFile;
+    QAction *actionSavePolygonData;
     QWidget *centralWidget;
+    QLabel *label;
+    QSpinBox *spinBox_selectPolygonID;
+    QPushButton *pushButton_selectColor;
+    QLabel *label_2;
+    QSpinBox *spinBox_selectGroupID;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -50,20 +57,37 @@ public:
     {
         if (SpriteEditorClass->objectName().isEmpty())
             SpriteEditorClass->setObjectName(QStringLiteral("SpriteEditorClass"));
-        SpriteEditorClass->resize(1078, 794);
+        SpriteEditorClass->resize(1264, 794);
         SpriteEditorClass->setAcceptDrops(true);
         actionOpenFile = new QAction(SpriteEditorClass);
         actionOpenFile->setObjectName(QStringLiteral("actionOpenFile"));
         actionSaveOriginalFile = new QAction(SpriteEditorClass);
         actionSaveOriginalFile->setObjectName(QStringLiteral("actionSaveOriginalFile"));
-        actionLoadOriginalFile = new QAction(SpriteEditorClass);
-        actionLoadOriginalFile->setObjectName(QStringLiteral("actionLoadOriginalFile"));
+        actionSavePolygonData = new QAction(SpriteEditorClass);
+        actionSavePolygonData->setObjectName(QStringLiteral("actionSavePolygonData"));
         centralWidget = new QWidget(SpriteEditorClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(50, 30, 91, 20));
+        spinBox_selectPolygonID = new QSpinBox(centralWidget);
+        spinBox_selectPolygonID->setObjectName(QStringLiteral("spinBox_selectPolygonID"));
+        spinBox_selectPolygonID->setGeometry(QRect(150, 30, 81, 22));
+        spinBox_selectPolygonID->setMaximum(511);
+        pushButton_selectColor = new QPushButton(centralWidget);
+        pushButton_selectColor->setObjectName(QStringLiteral("pushButton_selectColor"));
+        pushButton_selectColor->setGeometry(QRect(40, 80, 75, 23));
+        label_2 = new QLabel(centralWidget);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(50, 50, 91, 20));
+        spinBox_selectGroupID = new QSpinBox(centralWidget);
+        spinBox_selectGroupID->setObjectName(QStringLiteral("spinBox_selectGroupID"));
+        spinBox_selectGroupID->setGeometry(QRect(150, 50, 81, 22));
+        spinBox_selectGroupID->setMaximum(511);
         SpriteEditorClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(SpriteEditorClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1078, 24));
+        menuBar->setGeometry(QRect(0, 0, 1264, 24));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         SpriteEditorClass->setMenuBar(menuBar);
@@ -106,7 +130,7 @@ public:
         SpriteEditorClass->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockWidget);
 
         menuBar->addAction(menuFile->menuAction());
-        menuFile->addAction(actionLoadOriginalFile);
+        menuFile->addAction(actionSavePolygonData);
         menuFile->addAction(actionSaveOriginalFile);
         menuFile->addAction(actionOpenFile);
 
@@ -120,7 +144,10 @@ public:
         SpriteEditorClass->setWindowTitle(QApplication::translate("SpriteEditorClass", "SpriteEditor", 0));
         actionOpenFile->setText(QApplication::translate("SpriteEditorClass", "\347\224\273\345\203\217\343\203\225\343\202\241\343\202\244\343\203\253\343\202\222\351\226\213\343\201\217", 0));
         actionSaveOriginalFile->setText(QApplication::translate("SpriteEditorClass", "\343\203\225\343\202\241\343\202\244\343\203\253\343\201\256\344\277\235\345\255\230", 0));
-        actionLoadOriginalFile->setText(QApplication::translate("SpriteEditorClass", "\343\203\225\343\202\241\343\202\244\343\203\253\343\201\256\350\252\255\343\201\277\350\276\274\343\201\277", 0));
+        actionSavePolygonData->setText(QApplication::translate("SpriteEditorClass", "\343\203\235\343\203\252\343\202\264\343\203\263\343\203\207\343\203\274\343\202\277\343\201\256\344\277\235\345\255\230", 0));
+        label->setText(QApplication::translate("SpriteEditorClass", "SelectPolygonID", 0));
+        pushButton_selectColor->setText(QApplication::translate("SpriteEditorClass", "\350\211\262\343\202\222\351\201\270\346\212\236", 0));
+        label_2->setText(QApplication::translate("SpriteEditorClass", "SetGroupID", 0));
         menuFile->setTitle(QApplication::translate("SpriteEditorClass", "File", 0));
         dockWidget_ImageList->setWindowTitle(QApplication::translate("SpriteEditorClass", "Image Lists", 0));
         dockWidget->setWindowTitle(QApplication::translate("SpriteEditorClass", "ImageViewer", 0));

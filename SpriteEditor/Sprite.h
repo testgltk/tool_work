@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 class CUVDataManual;
+class CDrawTriangle;
 
 //==============================================================================================
 // スプライトクラス
@@ -26,7 +27,9 @@ class CUVDataManual;
 class CSprite
 {
 public:
-	static const int MAX_UV_POINT = 256;
+	static const int MAX_UV_POINT = 2048;
+
+	static const int MAX_USE_TRIANGLES = 512;
 
 	CSprite(void);
 	virtual ~CSprite(void);
@@ -48,12 +51,16 @@ public:
 	void AllClearUV(void);
 
 	void Draw(void);
+	void DrawTest(void);
 
 	void SetTextureAndPath(const QString path, GLuint& data);
 	QString GetTexturePath(void){ return m_TexturePath; }
 
-	void Save(FILE* pFile);
+	void Save(FILE* pFile); /// スプライトデータのみの保存
+	void SavePolygon(FILE* pFile); /// ポリゴンデータのみの保存
 
+	void SetNowSelectPolygonColor(int nIndex,float r, float g, float b, float a);
+	void SetNowSelectPolygonGroupID(int nIndex, int nGroupID);
 protected:
 	void DrawOwnSprite(void);
 	void DrawAllUVPoints(void);
@@ -66,8 +73,11 @@ private:
 	float m_TextureWidth;
 	float m_TextureHeight;
 	int   m_UseUVCount;
+
+	int  m_UseTriangleCount;
 	QString m_TexturePath;
 	GLuint m_TextureData;
 	CUVDataManual* m_pUVDatas;
+	CDrawTriangle* m_pDrawTriangles;
 };
 #endif
