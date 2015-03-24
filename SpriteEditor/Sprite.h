@@ -34,12 +34,18 @@ public:
 	void SetY(float fY){ m_Y = fY; }
 	float GetX(void){ return m_X; }
 	float GetY(void){ return m_Y; }
-	float SetWidth(float fW){ m_Width = fW; }
-	float SetHeight(float fH){ m_Height = fH; }
-	float GetWidth(void){ return m_Width; }
-	float GetHeight(void){ return m_Height; }
+	void SetPolygonWidth(float fW){ m_PolygonWidth = fW; }
+	void SetPolygonHeight(float fH){ m_PolygonHeight = fH; }
+	float GetPolygonWidth(void){ return m_PolygonWidth; }
+	float GetPolygonHeight(void){ return m_PolygonHeight; }
+	void SetTextureWidth(float fTexW){ m_TextureWidth = fTexW; }
+	void SetTextureHeight(float fTexH){ m_TextureHeight = fTexH; }
+	float GetTextureWidth(void){ return m_TextureWidth; }
+	float GetTextureHeight(void){ return m_TextureHeight; }
+
 	void AddUV(const QPoint qpoint);
 	void DeleteLastUV(void);
+	void AllClearUV(void);
 
 	void Draw(void);
 
@@ -55,8 +61,10 @@ protected:
 private:
 	float m_X;
 	float m_Y;
-	float m_Width;
-	float m_Height;
+	float m_PolygonWidth;
+	float m_PolygonHeight;
+	float m_TextureWidth;
+	float m_TextureHeight;
 	int   m_UseUVCount;
 	QString m_TexturePath;
 	GLuint m_TextureData;

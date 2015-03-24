@@ -13,7 +13,16 @@
 #include "glwidget.h"
 #include "UVDataManual.h"
 
-CSprite::CSprite(void) :m_X(0.0f), m_Y(0.0f), m_Width(1.0f), m_Height(1.0f), m_TexturePath(""), m_TextureData(0), m_UseUVCount(0)
+CSprite::CSprite(void) :
+m_X(0.0f),
+m_Y(0.0f),
+m_PolygonWidth(1.0f),
+m_PolygonHeight(1.0f),
+m_TexturePath(""),
+m_TextureData(0),
+m_UseUVCount(0),
+m_TextureWidth(1.0f),
+m_TextureHeight(1.0f)
 {
 	m_pUVDatas = new CUVDataManual[MAX_UV_POINT];
 }
@@ -38,6 +47,14 @@ void CSprite::Draw(void)
 
 void CSprite::DrawOwnSprite(void)
 {
+	// ç¿ïWånÇÃê›íË
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+	glEnable(GL_TEXTURE_2D);
+
 	glBindTexture(GL_TEXTURE_2D, m_TextureData);
 	glBegin(GL_QUADS);
 	glColor3f(1, 1, 1);
@@ -58,6 +75,7 @@ void CSprite::DrawOwnSprite(void)
 
 void CSprite::DrawAllUVPoints(void)
 {
+	// ç¿ïWånÇÃê›íË
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0.0, 650.0, 650.0, 0);
@@ -77,12 +95,12 @@ void CSprite::SetTextureAndPath(const QString path, GLuint& data)
 
 void CSprite::Save(FILE* pFile)
 {
-	fprintf(pFile, "TexturePath:%s", m_TexturePath.toLocal8Bit().data());
-	fprintf(pFile, "UV   Counts:%d", m_UseUVCount);
+	fprintf(pFile, "TexturePath:%s\n", m_TexturePath.toLocal8Bit().data());
+	fprintf(pFile, "UV   Counts:%d\n", m_UseUVCount);
 
 	for (int i = 0; i < m_UseUVCount; i++)
 	{
-		fprintf(pFile, "UV %d %f %f", i, (float)m_pUVDatas[i].GetUV().x(), (float)m_pUVDatas[i].GetUV().y());
+		fprintf(pFile, "UV %d %f %f\n", i, (float)m_pUVDatas[i].GetUV().x(), (float)m_pUVDatas[i].GetUV().y());
 	}
 }
 
@@ -93,7 +111,14 @@ void CSprite::AddUV(const QPoint qpoint)
 		return;
 	}
 	m_pUVDatas[m_UseUVCount].SetDrawPoint(qpoint);
-	m_pUVDatas[m_UseUVCount].SetUVPoint(qpoint);
+
+	QPointF uvSetPoint;
+	float RateX = ((float)qpoint.x() - GlWidget::ADDPOINT_LIMIT_X_LEFT) / (float)(GlWidget::ADDPOINT_LIMIT_X_RIGHT - GlWidget::ADDPOINT_LIMIT_X_LEFT);
+	float RateY = ((float)qpoint.y() - GlWidget::ADDPOINT_LIMIT_Y_UP  ) / (float)(GlWidget::ADDPOINT_LIMIT_Y_DOWN  - GlWidget::ADDPOINT_LIMIT_Y_UP);
+	uvSetPoint.setX(RateX);
+	uvSetPoint.setY(RateY);
+	//m_pUVDatas[m_UseUVCount].SetUVPoint(qpoint);
+	m_pUVDatas[m_UseUVCount].SetUVPoint(uvSetPoint);
 	m_UseUVCount++;
 }
 
@@ -104,4 +129,9 @@ void CSprite::DeleteLastUV(void)
 		return;
 	}
 	m_UseUVCount--;
+}
+
+void CSprite::AllClearUV(void)
+{
+	m_UseUVCount = 0;
 }

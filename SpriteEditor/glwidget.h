@@ -14,6 +14,10 @@ public:
 	static const float MOUSE_OFFSET_X;
 	static const float MOUSE_OFFSET_Y;
 	static const int TEXUTER_ARRAY_MAX = 1000;
+	static const float ADDPOINT_LIMIT_X_LEFT;
+	static const float ADDPOINT_LIMIT_X_RIGHT;
+	static const float ADDPOINT_LIMIT_Y_UP;
+	static const float ADDPOINT_LIMIT_Y_DOWN;
 	GlWidget(QWidget *parent);
 	~GlWidget();
 	void AddTextureNum(int nNum);

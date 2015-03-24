@@ -24,11 +24,11 @@ public:
 	virtual void SetDrawPoint(void){}
 	virtual void SetUVPoint(void){}
 	virtual void Draw(void);
-	QPoint& GetUV(void){ return m_UVPoint; }
+	QPointF& GetUV(void){ return m_UVPoint; }
 
 protected:
-	QPoint m_DrawPoint;	///> 描画座標系でのポイント
-	QPoint m_UVPoint;	///> 描画座標系に対応するUV値
+	QPointF m_DrawPoint;	///> 描画座標系でのポイント
+	QPointF m_UVPoint;	///> 描画座標系に対応するUV値
 private:
 
 };

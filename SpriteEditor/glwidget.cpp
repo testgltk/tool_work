@@ -7,6 +7,10 @@
 
 const float GlWidget::MOUSE_OFFSET_X = +0.0f;
 const float GlWidget::MOUSE_OFFSET_Y = +0.0f;
+const float GlWidget::ADDPOINT_LIMIT_X_LEFT  = 162;
+const float GlWidget::ADDPOINT_LIMIT_X_RIGHT = 486;
+const float GlWidget::ADDPOINT_LIMIT_Y_UP    = 162;
+const float GlWidget::ADDPOINT_LIMIT_Y_DOWN  = 486;
 
 GlWidget::GlWidget(QWidget *parent)
 	: QGLWidget(parent)
@@ -67,7 +71,7 @@ void GlWidget::initializeGL()
 
 	//テクスチャ 初期化
 	texture = bindTexture(QImage("testRect.png"));
-
+	
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	timer->start(16, this);
@@ -85,70 +89,9 @@ void GlWidget::paintGL()
 	qglColor(Qt::black);            //  描画色指定
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// 座標系の設定
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glBindTexture(GL_TEXTURE_2D,textures[m_DispTextureNum]);
-
-	//ポリゴンを1枚描画
-#if 0
-	glBegin(GL_QUADS);
-	glColor3f(1, 1, 1);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(-0.5, -0.5, 0);
-
-	glColor3f(1, 1, 1);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(-0.5, 0.5, 0);
-	
-	glColor3f(1, 1, 1);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(0.5, 0.5, 0);
-
-	glColor3f(1, 1, 1);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(0.5, -0.5, 0);
-	glEnd();
-#endif
-
-
-
+	//選択されてるポリゴンを1枚描画 (内部で設定されたUVも描画)
 	m_pSprites[m_DispTextureNum].Draw();
 	
-#if 0
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	//DrawLine
-	// 座標系の設定
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	//gluOrtho2D(00.0, 600.0, 00.0, 660.0);
-	gluOrtho2D(0.0, 650.0, 650.0,0);
-
-	//glBegin(GL_LINES);
-	//glColor3f(1, 1, 1);
-	//glVertex3f(0, 0, 0);
-	//glColor3f(1, 1, 1);
-	//glVertex3f(1, 0, 0);
-	//glEnd();
-
-	glDisable(GL_TEXTURE_2D);
-	glPointSize(3.0);
-	glBegin(GL_POINTS);
-	
-	for (int i = 0; i < m_UsePointCount; i++)
-	{
-		glColor3f(1, 1, 0);
-		glVertex3f(m_QPoints[i].x() + MOUSE_OFFSET_X, m_QPoints[i].y() + MOUSE_OFFSET_Y, 0);
-	}
-	glEnd();
-#endif
 }
 
 void GlWidget::timerEvent(QTimerEvent *e)
@@ -159,8 +102,14 @@ void GlWidget::timerEvent(QTimerEvent *e)
 
 void GlWidget::AddTextureFile(QString fileName)
 {
-	textures[m_textureNum] = bindTexture(QImage(fileName));
+	QImage qimage(fileName);
+	float Width = (float)qimage.width();
+	float height = (float)qimage.height();
+
+	textures[m_textureNum] = bindTexture(qimage);
 	m_pSprites[m_textureNum].SetTextureAndPath(fileName, textures[m_textureNum]);
+	m_pSprites[m_textureNum].SetTextureWidth(Width);
+	m_pSprites[m_textureNum].SetTextureHeight(height);
 	m_textureNum++;
 }
 
@@ -193,6 +142,7 @@ void GlWidget::mousePressEvent(QMouseEvent *e)
 	else if (e->button() == Qt::RightButton)
 	{
 		DeleteLastPoint();
+		m_pSprites[m_DispTextureNum].DeleteLastUV();
 	}
 }
 
@@ -201,6 +151,21 @@ void GlWidget::mousePressEvent(QMouseEvent *e)
 void GlWidget::AddPoint(const QPoint qpoint)
 {
 	if (m_UsePointCount >= TEXUTER_ARRAY_MAX)
+	{
+		return;
+	}
+
+	//点を追加できる位置か計算
+	float x = qpoint.x();
+	float y = qpoint.y();
+
+	//範囲外ならスキップ X
+	if (x < ADDPOINT_LIMIT_X_LEFT || ADDPOINT_LIMIT_X_RIGHT< x)
+	{
+		return;
+	}
+	//範囲外ならスキップ Y
+	if (y < ADDPOINT_LIMIT_Y_UP || ADDPOINT_LIMIT_Y_DOWN< y)
 	{
 		return;
 	}
@@ -224,7 +189,9 @@ void GlWidget::DeleteLastPoint(void)
 
 void GlWidget::AllClearPoint(void)
 {
+	m_pSprites[m_DispTextureNum].AllClearUV();
 	m_UsePointCount = 0;
+	
 }
 
 void GlWidget::SaveSprite(const char* const FileName)

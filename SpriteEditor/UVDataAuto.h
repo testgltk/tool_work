@@ -21,8 +21,8 @@ public:
 	CUVDataAuto(void){}
 	virtual ~CUVDataAuto(void){}
 
-	virtual void SetDrawPoint(const QPoint& qpoint){ m_DrawPoint = qpoint; }
-	virtual void SetUVPoint(const QPoint& qpoint){ m_UVPoint = qpoint; }
+	virtual void SetDrawPoint(const QPointF& qpoint){ m_DrawPoint = qpoint; }
+	virtual void SetUVPoint(const QPointF& qpoint){ m_UVPoint = qpoint; }
 
 protected:
 private:
