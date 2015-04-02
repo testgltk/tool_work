@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QBasicTimer>
 #include <QMouseEvent>
+#include <QPointF>
 class CSprite;
 
 class GlWidget : public QGLWidget
@@ -26,6 +27,7 @@ public:
 	void SetTextureIndex(int nIndex);
 
 	void AddPoint(const QPoint qpoint);
+	void AddPointF(const QPointF qpointf);
 	void DeleteLastPoint(void);
 	void AllClearPoint(void);
 

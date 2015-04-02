@@ -192,6 +192,7 @@ void CSprite::AddUV(const QPoint qpoint)
 	}
 	m_pUVDatas[m_UseUVCount].SetDrawPoint(qpoint);
 
+	
 	QPointF uvSetPoint;
 	float RateX = ((float)qpoint.x() - GlWidget::ADDPOINT_LIMIT_X_LEFT) / (float)(GlWidget::ADDPOINT_LIMIT_X_RIGHT - GlWidget::ADDPOINT_LIMIT_X_LEFT);
 	float RateY = ((float)qpoint.y() - GlWidget::ADDPOINT_LIMIT_Y_UP  ) / (float)(GlWidget::ADDPOINT_LIMIT_Y_DOWN  - GlWidget::ADDPOINT_LIMIT_Y_UP);
@@ -213,6 +214,43 @@ void CSprite::AddUV(const QPoint qpoint)
 		m_pDrawTriangles[m_UseTriangleCount].AddVertexCount();
 	}
 	
+	//追加後に三角形が成立したら新たに三角形ポリゴンデータを用意
+	if (m_pDrawTriangles[m_UseTriangleCount].GetUseVertexCount() >= 3)
+	{
+		m_UseTriangleCount++;
+	}
+}
+
+void CSprite::AddUVF(const QPointF qpointf)
+{
+	if (m_UseUVCount >= MAX_UV_POINT)
+	{
+		return;
+	}
+	m_pUVDatas[m_UseUVCount].SetDrawPoint(qpointf);
+
+
+	QPointF uvSetPoint;
+	float RateX = ((float)qpointf.x() - GlWidget::ADDPOINT_LIMIT_X_LEFT) / (float)(GlWidget::ADDPOINT_LIMIT_X_RIGHT - GlWidget::ADDPOINT_LIMIT_X_LEFT);
+	float RateY = ((float)qpointf.y() - GlWidget::ADDPOINT_LIMIT_Y_UP) / (float)(GlWidget::ADDPOINT_LIMIT_Y_DOWN - GlWidget::ADDPOINT_LIMIT_Y_UP);
+	uvSetPoint.setX(RateX);
+	uvSetPoint.setY(RateY);
+	//m_pUVDatas[m_UseUVCount].SetUVPoint(qpoint);
+	m_pUVDatas[m_UseUVCount].SetUVPoint(uvSetPoint);
+	m_UseUVCount++;
+
+	//////////////////
+	/// TRIANGLE DATA
+	//////////////////
+	int nowUseTriIndex = m_pDrawTriangles[m_UseTriangleCount].GetUseVertexCount();
+	// 3角形が足りないならそれに追加してく
+	if (m_pDrawTriangles[m_UseTriangleCount].GetUseVertexCount() <= 2)
+	{
+		m_pDrawTriangles[m_UseTriangleCount].SetVertex(nowUseTriIndex, qpointf.x(), qpointf.y(), 0);
+		m_pDrawTriangles[m_UseTriangleCount].SetTexcoord(nowUseTriIndex, RateX, RateY);
+		m_pDrawTriangles[m_UseTriangleCount].AddVertexCount();
+	}
+
 	//追加後に三角形が成立したら新たに三角形ポリゴンデータを用意
 	if (m_pDrawTriangles[m_UseTriangleCount].GetUseVertexCount() >= 3)
 	{

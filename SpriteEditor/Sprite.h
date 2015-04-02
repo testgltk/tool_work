@@ -27,7 +27,7 @@ class CDrawTriangle;
 class CSprite
 {
 public:
-	static const int MAX_UV_POINT = 2048;
+	static const int MAX_UV_POINT = 6000;
 
 	static const int MAX_USE_TRIANGLES = 512;
 
@@ -47,6 +47,7 @@ public:
 	float GetTextureHeight(void){ return m_TextureHeight; }
 
 	void AddUV(const QPoint qpoint);
+	void AddUVF(const QPointF qpointf);
 	void DeleteLastUV(void);
 	void AllClearUV(void);
 

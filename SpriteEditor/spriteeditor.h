@@ -13,7 +13,7 @@ public:
 	~SpriteEditor();
 	Ui::SpriteEditorClass ui;
 private:
-	
+	void AutoGeneratePointOfFile(const QString& filename);
 private slots:
 void on_actionOpenFile_triggered(void);
 void on_actionSaveOriginalFile_triggered(void);

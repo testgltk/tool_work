@@ -1,6 +1,7 @@
 #include "spriteeditor.h"
 #include <QGraphicsView>
 #include <QImage>
+#include <Qrgb>
 #include <QRect>
 #include <QWidget>
 #include <QFileDialog>
@@ -22,6 +23,74 @@ SpriteEditor::SpriteEditor(QWidget *parent):QMainWindow(parent)
 SpriteEditor::~SpriteEditor()
 {
 
+}
+
+void SpriteEditor::AutoGeneratePointOfFile(const QString& fileName)
+{
+	QImage qimage;
+	qimage.load(fileName);
+
+	int qimage_w = qimage.width();
+	int qimage_h = qimage.height();
+
+	//get First pixel value
+	QColor FirstColor(qimage.pixel(0, 0));
+
+	int pixelCount = 0;
+
+	bool getDiffStart = false;
+
+
+	for (int nCntY = 0; nCntY < qimage_h; nCntY++)
+	{
+		for (int nCntX = 0; nCntX < qimage_w; nCntX++)
+		{
+			if (nCntX == 0 && nCntY == 0)
+			{
+				nCntX++;
+			}
+
+			QColor clrCurrent(qimage.pixel(nCntX, nCntY));
+
+			if (!getDiffStart)
+			{
+				//初期ピクセル参照値と現在カラーがことなるなら操作フラグを有効
+				if (FirstColor != clrCurrent)
+				{
+					pixelCount++;
+					getDiffStart = true;
+					//ui.OpenGLWidget->AddPointF(QPointF((float)(float)nCntX / (float)qimage_w, nCntY));
+					ui.OpenGLWidget->AddPointF(QPointF(nCntX, nCntY));
+				}
+			}
+			else
+			{
+				//操作フラグ有効時に現在参照ピクセル値と初期ピクセルが一致するなら操作フラグを無効
+				//ここでもピクセル打ち込み処理を実行
+				//有効なときに1つ手前と違う
+				if (FirstColor == clrCurrent)
+				{
+					pixelCount++;
+					getDiffStart = false;
+					ui.OpenGLWidget->AddPointF(QPointF(nCntX, nCntY));
+
+
+				}
+			}
+
+			if (FirstColor != clrCurrent)
+			{
+				//pixelCount++;
+			}
+
+			float a = clrCurrent.alphaF();
+			float r = clrCurrent.redF();
+			float g = clrCurrent.greenF();
+			float b = clrCurrent.blueF();
+		}
+	}
+
+	pixelCount = pixelCount;
 }
 
 void SpriteEditor::on_actionOpenFile_triggered(void)
@@ -46,18 +115,7 @@ void SpriteEditor::on_actionOpenFile_triggered(void)
 		ui.listWidget->addItem(fileName);
 		ui.OpenGLWidget->AddTextureFile(fileName);
 
-	#if 0
-			QGraphicsScene scene;
-			//QGraphicsPixmapItem item(QPixmap::fromImage(image)); ///OK
-			QPixmap pixmap;
-			pixmap.load(fileName);
-			//(QPixmap::fromImage(image));
-			scene.addPixmap(pixmap);
-			//ui.label_2->setPixmap(pixmap);
-			//scene.addItem(&item);
-			//ui.graphicsView->setScene(&scene);
-			//ui.graphicsView->show();
-	#endif
+		AutoGeneratePointOfFile(fileName);
 	}
 }
 

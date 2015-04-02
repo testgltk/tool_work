@@ -187,6 +187,34 @@ void GlWidget::AddPoint(const QPoint qpoint)
 	
 }
 
+void GlWidget::AddPointF(const QPointF qpointf)
+{
+	if (m_UsePointCount >= TEXUTER_ARRAY_MAX)
+	{
+		return;
+	}
+
+	//点を追加できる位置か計算
+	float x = qpointf.x();
+	float y = qpointf.y();
+
+	//範囲外ならスキップ X
+	if (x < ADDPOINT_LIMIT_X_LEFT || ADDPOINT_LIMIT_X_RIGHT< x)
+	{
+		return;
+	}
+	//範囲外ならスキップ Y
+	if (y < ADDPOINT_LIMIT_Y_UP || ADDPOINT_LIMIT_Y_DOWN< y)
+	{
+		return;
+	}
+
+	m_pSprites[m_DispTextureNum].AddUVF(qpointf);
+
+	//m_QPoints[m_UsePointCount] = (QPoint)(qpointf);
+	m_UsePointCount++;
+}
+
 void GlWidget::DeleteLastPoint(void)
 {
 	if (m_UsePointCount <= 0)
