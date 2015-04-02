@@ -115,7 +115,7 @@ void SpriteEditor::on_actionOpenFile_triggered(void)
 		ui.listWidget->addItem(fileName);
 		ui.OpenGLWidget->AddTextureFile(fileName);
 
-		AutoGeneratePointOfFile(fileName);
+		//AutoGeneratePointOfFile(fileName);
 	}
 }
 

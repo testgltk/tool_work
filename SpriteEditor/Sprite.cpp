@@ -47,8 +47,9 @@ CSprite::~CSprite(void)
 //==============================================================================================
 void CSprite::Draw(void)
 {
-	DrawOwnSprite();
-	DrawAllUVPoints();
+	DrawTest();
+	//DrawOwnSprite();
+	///DrawAllUVPoints();
 }
 
 //==============================================================================================
@@ -56,28 +57,57 @@ void CSprite::Draw(void)
 //==============================================================================================
 void CSprite::DrawTest(void)
 {
-	// 座標系の設定
+	float vertex[] =
+	{
+		-0.5f, -0.5f, 0, // list 0
+		-0.5, 0.5, 0,	 // list 1
+		0.5, 0.5, 0,	 // list 2
+		0.5, -0.5, 0	 // list 3
+	};
+
+	float colors[] =
+	{
+		1, 1, 1,
+		1, 0.2, 1,
+		1, 0.2, 1,
+		1, 1, 1
+	};
+
+	GLubyte indices[] = { 0, 1, 2, 3 };
+	GLubyte indices2[] = { 0, 1, 2, 0,2,3 };
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0.0, 650.0, 650.0, 0);
-	glBegin(GL_TRIANGLES);
+	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+	glEnable(GL_TEXTURE_2D);
 
-	glColor3f(1, 1, 1);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(-0.5, -0.5, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glColor3f(1, 1, 1);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(-0.5, 0.5, 0);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 
-	glColor3f(1, 1, 1);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(0.5, 0.5, 0);
+	glVertexPointer(3, GL_FLOAT, 0, vertex);	//座標
+	//glNormalPointer(GL_FLOAT, 0, Normal);		//法線
+	glColorPointer(3, GL_FLOAT, 0, colors);		//色
 
-	glColor3f(1, 1, 1);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(0.5, -0.5, 0);
-	glEnd();
+	//送るデータが配列もしくはインデックスの場合についてはglBegin glEndは必要ない。
+	//glDrawArrays(GL_QUADS, 0, 4 * 1);	//描画(4頂点*1面)　(非インデックスかつ配列渡し)
+
+	///glDrawElements(GL_QUADS, 4 /*存在頂点数*/, GL_UNSIGNED_BYTE, indices);
+
+	//test
+	glDrawElements(GL_TRIANGLES, 6,GL_UNSIGNED_BYTE,indices2);
+
+	glFlush();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//無効化
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	
 }
 
 
@@ -93,8 +123,6 @@ void CSprite::DrawOwnSprite(void)
 	glLoadIdentity();
 	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
-
-
 
 	glBindTexture(GL_TEXTURE_2D, m_TextureData);
 	glBegin(GL_QUADS);

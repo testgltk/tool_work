@@ -81,7 +81,6 @@ void GlWidget::initializeGL()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 
@@ -101,7 +100,6 @@ void GlWidget::paintGL()
 
 	//‘I‘ğ‚³‚ê‚Ä‚éƒ|ƒŠƒSƒ“‚ğ1–‡•`‰æ (“à•”‚Åİ’è‚³‚ê‚½UV‚à•`‰æ)
 	m_pSprites[m_DispTextureNum].Draw();
-	
 }
 
 void GlWidget::timerEvent(QTimerEvent *e)
@@ -121,8 +119,6 @@ void GlWidget::AddTextureFile(QString fileName)
 	m_pSprites[m_textureNum].SetTextureWidth(Width);
 	m_pSprites[m_textureNum].SetTextureHeight(height);
 	m_textureNum++;
-
-
 }
 
 void GlWidget::AddTextureNum(int nNum)
