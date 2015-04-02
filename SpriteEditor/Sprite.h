@@ -20,6 +20,7 @@
 
 class CUVDataManual;
 class CDrawTriangle;
+class CDrawTriangleIndex;
 
 //==============================================================================================
 // スプライトクラス
@@ -48,6 +49,9 @@ public:
 
 	void AddUV(const QPoint qpoint);
 	void AddUVF(const QPointF qpointf);
+
+	void AddIndexTest(const QPointF qpointf);
+
 	void DeleteLastUV(void);
 	void AllClearUV(void);
 
@@ -80,5 +84,6 @@ private:
 	GLuint m_TextureData;
 	CUVDataManual* m_pUVDatas;
 	CDrawTriangle* m_pDrawTriangles;
+	CDrawTriangleIndex* m_pDrawTriangleIndex;
 };
 #endif

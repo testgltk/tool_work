@@ -77,6 +77,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="draglistwidget.cpp" />
+    <ClCompile Include="DrawTriangleIndex.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_draglistwidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -135,10 +136,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawTriangle.h" />
+    <ClInclude Include="DrawTriangleIndex.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="UVData.h" />
     <ClInclude Include="UVDataAuto.h" />
     <ClInclude Include="UVDataManual.h" />
+    <ClInclude Include="vertexFormat.h" />
     <CustomBuild Include="draglistwidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing draglistwidget.h...</Message>

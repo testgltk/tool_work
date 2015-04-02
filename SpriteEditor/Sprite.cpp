@@ -13,6 +13,7 @@
 #include "glwidget.h"
 #include "UVDataManual.h"
 #include "DrawTriangle.h"
+#include "DrawTriangleIndex.h"
 
 CSprite::CSprite(void) :
 m_X(0.0f),
@@ -29,6 +30,8 @@ m_UseTriangleCount(0)
 	m_pUVDatas = new CUVDataManual[MAX_UV_POINT];
 
 	m_pDrawTriangles = new CDrawTriangle[MAX_USE_TRIANGLES];
+
+	m_pDrawTriangleIndex = new CDrawTriangleIndex;
 }
 
 CSprite::~CSprite(void)
@@ -40,6 +43,9 @@ CSprite::~CSprite(void)
 
 	delete[] m_pDrawTriangles;
 	m_pDrawTriangles = 0;
+
+	delete m_pDrawTriangleIndex;
+	m_pDrawTriangleIndex = 0;
 }
 
 //==============================================================================================
@@ -47,9 +53,11 @@ CSprite::~CSprite(void)
 //==============================================================================================
 void CSprite::Draw(void)
 {
-	DrawTest();
-	//DrawOwnSprite();
+	//DrawTest();
+	DrawOwnSprite();
 	///DrawAllUVPoints();
+
+	m_pDrawTriangleIndex->DrawIndex();
 }
 
 //==============================================================================================
@@ -94,13 +102,12 @@ void CSprite::DrawTest(void)
 
 	//送るデータが配列もしくはインデックスの場合についてはglBegin glEndは必要ない。
 	//glDrawArrays(GL_QUADS, 0, 4 * 1);	//描画(4頂点*1面)　(非インデックスかつ配列渡し)
-
 	///glDrawElements(GL_QUADS, 4 /*存在頂点数*/, GL_UNSIGNED_BYTE, indices);
 
 	//test
 	glDrawElements(GL_TRIANGLES, 6,GL_UNSIGNED_BYTE,indices2);
-
 	glFlush();
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	//無効化
@@ -203,10 +210,12 @@ void CSprite::SavePolygon(FILE* pFile)
 	fprintf(pFile, "TexturePath:%s\n", m_TexturePath.toLocal8Bit().data());
 	fprintf(pFile, "Triangle   Counts:%d\n", m_UseTriangleCount);
 
-	for (int i = 0; i < m_UseTriangleCount; i++)
-	{
-		m_pDrawTriangles[i].Save(pFile);
-	}
+	//for (int i = 0; i < m_UseTriangleCount; i++)
+	//{
+	//	m_pDrawTriangles[i].Save(pFile);
+	//}
+	//
+	m_pDrawTriangleIndex->Save(pFile);
 }
 
 //==============================================================================================
@@ -284,6 +293,14 @@ void CSprite::AddUVF(const QPointF qpointf)
 	{
 		m_UseTriangleCount++;
 	}
+}
+
+void CSprite::AddIndexTest(const QPointF qpointf)
+{
+	//////////////////
+	/// TRIANGLE INDEX DATA
+	//////////////////S
+	m_pDrawTriangleIndex->AddPointFlow(qpointf);
 }
 
 //==============================================================================================

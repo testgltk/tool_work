@@ -178,6 +178,8 @@ void GlWidget::AddPoint(const QPoint qpoint)
 
 	m_pSprites[m_DispTextureNum].AddUV(qpoint);
 
+	m_pSprites[m_DispTextureNum].AddIndexTest(qpoint);
+
 	m_QPoints[m_UsePointCount] = qpoint;
 	m_UsePointCount++;
 	
